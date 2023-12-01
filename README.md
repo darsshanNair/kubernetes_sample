@@ -1,2 +1,9 @@
-# kubernetes_sample
-Playground for Kubernetes Configurations
+# Kubernetes Playground
+
+## Description
+
+This repository is a playground for Kubernetes configurations
+
+## Language
+
+YAML /  JSON
