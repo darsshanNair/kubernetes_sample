@@ -1,0 +1,67 @@
+[
+    {
+      "apiVersion": "apps/v1",
+      "kind": "Deployment",
+      "metadata": {
+        "name": "my-web-app-deployment"
+      },
+      "spec": {
+        "replicas": 3,
+        "selector": {
+          "matchLabels": {
+            "app": "my-web-app"
+          }
+        },
+        "template": {
+          "metadata": {
+            "labels": {
+              "app": "my-web-app"
+            }
+          },
+          "spec": {
+            "containers": [
+              {
+                "name": "my-web-app-container",
+                "image": "my-web-app:latest",
+                "ports": [
+                  {
+                    "containerPort": 80
+                  }
+                ],
+                "env": [
+                  {
+                    "name": "DATABASE_URL",
+                    "value": "mysql://user:password@database-host:3306/mydatabase"
+                  },
+                  {
+                    "name": "DEBUG_MODE",
+                    "value": "false"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "name": "my-web-app-service"
+      },
+      "spec": {
+        "selector": {
+          "app": "my-web-app"
+        },
+        "ports": [
+          {
+            "protocol": "TCP",
+            "port": 80,
+            "targetPort": 80
+          }
+        ],
+        "type": "LoadBalancer"
+      }
+    }
+  ]

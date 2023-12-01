@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-web-app-deployment
+spec:
+  replicas: 3 # Number of pods generated for the application
+  selector:
+    matchLabels:
+      app: my-web-app
+  template:
+    metadata:
+      labels:
+        app: my-web-app
+    spec:
+      containers: # Best practice is to have one app per container, single responsibility principle
+      - name: my-web-app-container
+        image: my-web-app:latest # Docker image for the containerised application
+        ports:
+        - containerPort: 80 # Port on which the container will listen
+        env:
+        - name: DATABASE_URL
+          value: "mysql://user:password@database-host:3306/mydatabase" # Database connection URL
+        - name: DEBUG_MODE
+          value: "false" # Set to "true" for debugging
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-web-app-service
+spec:
+  selector:
+    app: my-web-app
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+  type: LoadBalancer # Expose the service externally
